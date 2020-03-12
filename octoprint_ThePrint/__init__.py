@@ -4,11 +4,23 @@ from __future__ import absolute_import, unicode_literals
 import octoprint.plugin
 
 
-class ThePrintPlugin(octoprint.plugin.StartupPlugin):
-    def on_after_startup(self):
-        self._logger.info("Hello World!")
+class ThePrintPlugin(octoprint.plugin.StartupPlugin, octoprint.plugin.TemplatePlugin, octoprint.plugin.SettingsPlugin):
 
-		##~~ Softwareupdate hook
+	def on_after_startup(self):
+		self._logger.info("Pin of the light: %s" % self._settings.get(["pinLight"]))
+		self._logger.info("Pin of the fan: %s" % self._settings.get(["pinFan"]))
+
+	def get_settings_defaults(self):
+		return dict(pinLight=4, pinFan=17)
+
+	def get_template_vars(self):
+		return dict(pinLight=self._settings.get(["pinLight"]), pinFan=self._settings.get(["pinFan"]))
+
+	def get_template_configs(self):
+		return [
+			dict(type="navbar", custom_bindings=False),
+			dict(type="settings", custom_bindings=False)
+		]
 
 	def get_update_information(self):
 		# Define the configuration for your plugin to use with the Software Update
@@ -32,10 +44,9 @@ class ThePrintPlugin(octoprint.plugin.StartupPlugin):
 
 
 __plugin_name__ = "ThePrint"
-__plugin_version__ = "1.0.0"
-__plugin_description__ = "A quick \"Hello World\" example plugin for OctoPrint"
 __plugin_pythoncompat__ = ">=2.7,<4"
 __plugin_implementation__ = ThePrintPlugin()
+
 
 def __plugin_load__():
 	global __plugin_implementation__
