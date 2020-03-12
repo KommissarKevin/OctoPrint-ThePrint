@@ -11,7 +11,7 @@ class ThePrintPlugin(octoprint.plugin.StartupPlugin, octoprint.plugin.TemplatePl
 		self._logger.info("Pin of the fan: %s" % self._settings.get(["pinFan"]))
 
 	def get_settings_defaults(self):
-		return dict(pinLight=7, pinFan=15)
+		return dict(pinLight=4, pinFan=17)
 
 	def get_template_vars(self):
 		return dict(pinLight=self._settings.get(["pinLight"]), pinFan=self._settings.get(["pinFan"]))
@@ -26,27 +26,19 @@ class ThePrintPlugin(octoprint.plugin.StartupPlugin, octoprint.plugin.TemplatePl
 		if event == "Connected":
 			self._logger.info("Event '" + event + "' wurde ausgeloest")
 			# Lampe an
-			os.system("cd")
-			os.system("cd WiringPi")
 			os.system("gpio -g mode " + self._settings.get(["pinLight"]) + " out")
 		elif event == "Disconnected":
 			self._logger.info("Event '" + event + "' wurde ausgeloest")
 			# Lampe aus
-			os.system("cd")
-			os.system("cd WiringPi")
 			os.system("gpio -g mode " + self._settings.get(["pinLight"]) + " in")
 		elif event == "PrintStarted" or event == "PrintResumed":
 			self._logger.info("Event '" + event + "' wurde ausgeloest")
 			# Bei Start Lüfter
-			os.system("cd")
-			os.system("cd WiringPi")
-			os.system("gpio -g mode " + self._settings.get(["pinLed"]) + " out")
+			os.system("gpio -g mode " + self._settings.get(["pinFan"]) + " out")
 		elif event == "PrintFailed" or event == "PrintCancelled" or event == "PrintPaused":
 			self._logger.info("Event '" + event + "' wurde ausgeloest")
 			# Lüfter aus
-			os.system("cd")
-			os.system("cd WiringPi")
-			os.system("gpio -g mode " + self._settings.get(["pinLed"]) + " in")
+			os.system("gpio -g mode " + self._settings.get(["pinFan"]) + " in")
 
 	def get_update_information(self):
 		# Define the configuration for your plugin to use with the Software Update
