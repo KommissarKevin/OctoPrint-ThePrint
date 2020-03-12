@@ -2,10 +2,7 @@
 from __future__ import absolute_import, unicode_literals
 
 import octoprint.plugin
-# import RPi.GPIO as GPIO
-
-# GPIO.setmode(GPIO.BCM)
-
+import os
 
 class ThePrintPlugin(octoprint.plugin.StartupPlugin, octoprint.plugin.TemplatePlugin, octoprint.plugin.SettingsPlugin, octoprint.plugin.EventHandlerPlugin):
 
@@ -29,27 +26,27 @@ class ThePrintPlugin(octoprint.plugin.StartupPlugin, octoprint.plugin.TemplatePl
 		if event == "Connected":
 			self._logger.info("Event '" + event + "' wurde ausgeloest")
 			# Lampe an
-			# relais_light_gpio = int(self._settings.get(["pinLight"]))
-			# GPIO.setup(relais_light_gpio, GPIO.OUT)  # GPIO Modus zuweisen
-			# GPIO.output(relais_light_gpio, GPIO.HIGH)  # an
+			os.system("cd")
+			os.system("cd WiringPi")
+			os.system("gpio -g mode " + self._settings.get(["pinLight"]) + " out")
 		elif event == "Disconnected":
 			self._logger.info("Event '" + event + "' wurde ausgeloest")
 			# Lampe aus
-			# relais_light_gpio = int(self._settings.get(["pinLight"]))
-			# GPIO.setup(relais_light_gpio, GPIO.OUT)  # GPIO Modus zuweisen
-			# GPIO.output(relais_light_gpio, GPIO.LOW)  # aus
+			os.system("cd")
+			os.system("cd WiringPi")
+			os.system("gpio -g mode " + self._settings.get(["pinLight"]) + " in")
 		elif event == "PrintStarted" or event == "PrintResumed":
 			self._logger.info("Event '" + event + "' wurde ausgeloest")
 			# Bei Start Lüfter
-			# relais_fan_gpio = int(self._settings.get(["pinFan"]))
-			# GPIO.setup(relais_fan_gpio, GPIO.OUT)  # GPIO Modus zuweisen
-			# GPIO.output(relais_fan_gpio, GPIO.HIGH)  # an
+			os.system("cd")
+			os.system("cd WiringPi")
+			os.system("gpio -g mode " + self._settings.get(["pinLed"]) + " out")
 		elif event == "PrintFailed" or event == "PrintCancelled" or event == "PrintPaused":
 			self._logger.info("Event '" + event + "' wurde ausgeloest")
 			# Lüfter aus
-			# relais_fan_gpio = int(self._settings.get(["pinFan"]))
-			# GPIO.setup(relais_fan_gpio, GPIO.OUT)  # GPIO Modus zuweisen
-			# GPIO.output(relais_fan_gpio, GPIO.LOW)  # aus
+			os.system("cd")
+			os.system("cd WiringPi")
+			os.system("gpio -g mode " + self._settings.get(["pinLed"]) + " in")
 
 	def get_update_information(self):
 		# Define the configuration for your plugin to use with the Software Update
