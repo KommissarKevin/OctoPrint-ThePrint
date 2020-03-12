@@ -11,7 +11,7 @@ class ThePrintPlugin(octoprint.plugin.StartupPlugin, octoprint.plugin.TemplatePl
 		self._logger.info("Pin of the fan: %s" % self._settings.get(["pinFan"]))
 
 	def get_settings_defaults(self):
-		return dict(pinLight=4, pinFan=17)
+		return dict(pinLight=4, pinFan=14)
 
 	def get_template_vars(self):
 		return dict(pinLight=self._settings.get(["pinLight"]), pinFan=self._settings.get(["pinFan"]))
