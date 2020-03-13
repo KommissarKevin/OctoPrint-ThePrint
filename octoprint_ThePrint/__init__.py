@@ -4,41 +4,30 @@ from __future__ import absolute_import, unicode_literals
 import octoprint.plugin
 import os
 
-class ThePrintPlugin(octoprint.plugin.StartupPlugin, octoprint.plugin.TemplatePlugin, octoprint.plugin.SettingsPlugin, octoprint.plugin.EventHandlerPlugin):
+
+class ThePrintPlugin(octoprint.plugin.StartupPlugin, octoprint.plugin.EventHandlerPlugin):
 
 	def on_after_startup(self):
-		self._logger.info("Pin of the light: %s" % self._settings.get(["pinLight"]))
-		self._logger.info("Pin of the fan: %s" % self._settings.get(["pinFan"]))
-
-	def get_settings_defaults(self):
-		return dict(pinLight=4, pinFan=14)
-
-	def get_template_vars(self):
-		return dict(pinLight=self._settings.get(["pinLight"]), pinFan=self._settings.get(["pinFan"]))
-
-	def get_template_configs(self):
-		return [
-			dict(type="navbar", custom_bindings=False),
-			dict(type="settings", custom_bindings=False)
-		]
+		self._logger.info("Pin of the light: 4")
+		self._logger.info("Pin of the fan: 14")
 
 	def on_event(self, event, payload):
 		if event == "Connected":
 			self._logger.info("Event '" + event + "' wurde ausgeloest")
 			# Lampe an
-			os.system("gpio -g mode " + self._settings.get(["pinLight"]) + " out")
+			os.system("gpio -g mode 4 out")
 		elif event == "Disconnected":
 			self._logger.info("Event '" + event + "' wurde ausgeloest")
 			# Lampe aus
-			os.system("gpio -g mode " + self._settings.get(["pinLight"]) + " in")
+			os.system("gpio -g mode 4 in")
 		elif event == "PrintStarted" or event == "PrintResumed":
 			self._logger.info("Event '" + event + "' wurde ausgeloest")
 			# Bei Start Lüfter
-			os.system("gpio -g mode " + self._settings.get(["pinFan"]) + " out")
+			os.system("gpio -g mode 14 out")
 		elif event == "PrintFailed" or event == "PrintCancelled" or event == "PrintPaused":
 			self._logger.info("Event '" + event + "' wurde ausgeloest")
 			# Lüfter aus
-			os.system("gpio -g mode " + self._settings.get(["pinFan"]) + " in")
+			os.system("gpio -g mode 14 in")
 
 	def get_update_information(self):
 		# Define the configuration for your plugin to use with the Software Update
